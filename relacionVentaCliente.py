@@ -55,8 +55,8 @@ def mostrar_ventas_clientes():
         print("\nRelación Ventas-Clientes:")
         for venta in ventas_clientes:
             print(f"Venta ID: {venta['id_venta']}, Producto: {venta['id_producto']}, "
-                  f"Cantidad: {venta['cantidad']}, Cliente: {venta['nombre_cliente']} {venta['apellido_cliente']}, "
-                  f"Email: {venta['email_cliente']}")
+                f"Cantidad: {venta['cantidad']}, Cliente: {venta['nombre_cliente']} {venta['apellido_cliente']}, "
+                f"Email: {venta['email_cliente']}")
 
 
     mostrar_ventas_clientes()

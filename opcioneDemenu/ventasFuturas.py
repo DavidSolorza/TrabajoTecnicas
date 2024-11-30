@@ -41,12 +41,18 @@ def dividir_y_vencer_ventas(ventas):
     izquierda = dividir_y_vencer_ventas(ventas[:mitad])
     derecha = dividir_y_vencer_ventas(ventas[mitad:])
     
-    # Combinar los resultados calculando el promedio
-    return (izquierda + derecha) / 2
+    # Calcular el promedio ponderado en función del tamaño de cada mitad
+    total_ventas = len(ventas[:mitad]) + len(ventas[mitad:])
+    return ((izquierda * len(ventas[:mitad])) + (derecha * len(ventas[mitad:]))) / total_ventas
 
-def estimar_ventas_futuras(id_producto):
+
+def estimar_ventas_futuras():
     """Estima las ventas futuras para un producto utilizando Divide y Vencerás."""
     ventas = cargar_csv("ventas.csv")
+
+    # Solicitar el ID del producto al usuario
+    id_producto = input("Ingresa el ID del producto para estimar las ventas futuras: ")
+    # estimar_ventas_futuras(id_producto)
     
     # Filtrar las ventas del producto específico
     ventas_producto = filtrar_ventas_por_producto(ventas, id_producto)
@@ -64,6 +70,4 @@ def estimar_ventas_futuras(id_producto):
     print(f"Promedio de ventas estimado para el próximo mes: {round(promedio_ventas, 2)} unidades.")
 
 
-    # Solicitar el ID del producto al usuario
-id_producto = input("Ingresa el ID del producto para estimar las ventas futuras: ")
-estimar_ventas_futuras(id_producto)
+

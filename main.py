@@ -20,7 +20,7 @@ def menu_principal():
         if opcion == "1":
             mostrarInicial.mostrar_resumen_inicial()
         elif opcion == "2":
-          ventasFuturas
+            ventasFuturas.estimar_ventas_futuras()
         # elif opcion == "3":
         #     simular_compra()
         # elif opcion == "4":
@@ -30,8 +30,8 @@ def menu_principal():
         # elif opcion == "6":
         #     mostrar_informes_graficos()
         elif opcion == "7":
-             print("Saliendo del sistema.")
-             break
+            print("Saliendo del sistema.")
+            break
         else:
             print("Opción inválida. Intente nuevamente.")
     print("----------------------------------------------------------")
