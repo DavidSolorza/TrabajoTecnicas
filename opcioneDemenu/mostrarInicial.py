@@ -2,67 +2,65 @@ import os
 import csv
 
 # Ruta base donde se encuentran los archivos csv
-RUTA_BASE = "./archivos"  
+RUTA_BASE = "./archivos"
 
-# Cargar los datos desde los archivos CSV que le manda la funcion resumen inicial
-def cargar_csv(archivo):
-    # Construir la ruta completa del archivo
-    ruta_archivo = os.path.join(RUTA_BASE, archivo)
-    
+def cargar_csv(nombre_archivo):
+    """
+    Lee un archivo CSV y devuelve su contenido como una lista de diccionarios.
+    """
+    ruta_archivo = os.path.join(RUTA_BASE, nombre_archivo)
     try:
-        # Abrir el archivo y leerlo
-        with open(ruta_archivo, 'r') as archivo:
-            lector = csv.DictReader(archivo)
+        with open(ruta_archivo, 'r') as archivo_csv:
+            lector = csv.DictReader(archivo_csv)
             return [fila for fila in lector]
     except FileNotFoundError:
-        print(f"Error: No se encontró el archivo '{archivo}' en la ruta '{RUTA_BASE}'")
+        print(f"Error: No se encontró el archivo '{nombre_archivo}' en la ruta '{RUTA_BASE}'.")
         return []
 
-# Mostrar resumen inicial
 def mostrar_resumen_inicial():
-    # Cargar datos de los archivos usando la funcio cargando csv 
+    """
+    Muestra un resumen inicial con información general y el producto más vendido.
+    """
+    # Cargar datos desde los archivos CSV
     productos = cargar_csv('productos.csv')
     ventas = cargar_csv('ventas.csv')
     clientes = cargar_csv('clientes.csv')
     
-    # Verificar que los datos se hayan cargado correctamente
     if not productos or not ventas or not clientes:
         print("Error: Uno o más archivos no se pudieron cargar correctamente.")
         return
     
     # Número total de registros
-    num_productos = len(productos)
-    num_ventas = len(ventas)
-    num_clientes = len(clientes)
-    
     print("Resumen Inicial del Sistema de Ventas:")
-    print(f"- Total de productos: {num_productos}")
-    print(f"- Total de ventas: {num_ventas}")
-    print(f"- Total de clientes: {num_clientes}")
+    print(f"- Total de productos: {len(productos)}")
+    print(f"- Total de ventas: {len(ventas)}")
+    print(f"- Total de clientes: {len(clientes)}")
     
-    
-    
-    
-# Calcular el producto con mayor cantidad de ventas
+    # Calcular el producto con mayor cantidad de ventas
     ventas_por_producto = {}
     for venta in ventas:
-        id_producto = venta['id_producto']
-        cantidad = int(venta['cantidad'])
-        if id_producto in ventas_por_producto:
-            ventas_por_producto[id_producto] += cantidad
-        else:
-            ventas_por_producto[id_producto] = cantidad
+        try:
+            id_producto = venta['id_producto']
+            cantidad = int(venta['cantidad'])
+            ventas_por_producto[id_producto] = ventas_por_producto.get(id_producto, 0) + cantidad
+        except (ValueError, KeyError):
+            print(f"Advertencia: Datos inválidos en venta: {venta}")
+
+    if not ventas_por_producto:
+        print("No hay ventas válidas para analizar.")
+        return
     
     # Identificar el producto más vendido
     producto_mas_vendido_id = max(ventas_por_producto, key=ventas_por_producto.get)
     cantidad_mas_vendida = ventas_por_producto[producto_mas_vendido_id]
     
-    # Obtener información del producto más vendido
-    producto_mas_vendido = next(p for p in productos if p['id_producto'] == producto_mas_vendido_id)
-    nombre_producto = producto_mas_vendido['nombre']
-    categoria_producto = producto_mas_vendido['categoria']
+    # Buscar el producto más vendido
+    producto_mas_vendido = next((p for p in productos if p['id_producto'] == producto_mas_vendido_id), None)
     
-    print("\nProducto más vendido:")
-    print(f"- Nombre: {nombre_producto}")
-    print(f"- Categoría: {categoria_producto}")
-    print(f"- Cantidad vendida: {cantidad_mas_vendida}")
+    if producto_mas_vendido:
+        print("\nProducto más vendido:")
+        print(f"- Nombre: {producto_mas_vendido['nombre']}")
+        print(f"- Categoría: {producto_mas_vendido['categoria']}")
+        print(f"- Cantidad vendida: {cantidad_mas_vendida}")
+    else:
+        print(f"Advertencia: No se encontró información del producto con ID {producto_mas_vendido_id}.")

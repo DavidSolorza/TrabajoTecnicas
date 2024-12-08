@@ -1,7 +1,6 @@
-id_producto,nombre,categoria,precio
-
-101,Laptop,Electrónica,1200
-102,Smartphone,Electrónica,700
-103,Jeans,Ropa,50
-104,Chaqueta,Ropa,120
-105,Manzanas,Alimentos,2
+id_producto,nombre,categoria,precio,cantidad
+101,Laptop,Electrónica,1200,10
+102,Smartphone,Electrónica,700,5
+103,Jeans,Ropa,50,20
+104,Chaqueta,Ropa,120,15
+105,Manzanas,Alimentos,2,100

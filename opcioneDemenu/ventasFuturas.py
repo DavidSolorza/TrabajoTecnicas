@@ -2,7 +2,7 @@ import os
 import csv
 from datetime import datetime
 
-# Definimos la ruta base donde se encuentran los archivos CSV
+# Defino la ruta base donde se encuentran los archivos CSV
 RUTA_BASE = "./archivos"
 
 
@@ -27,7 +27,7 @@ def filtrar_ventas_por_producto(ventas, id_producto):
     Filtro las ventas de un producto específico y las convierto en un formato procesable.
     """
     try:
-        # Procesamos cada venta, convirtiendo la fecha y la cantidad a los formatos esperados.
+        # Proceso cada venta, convirtiendo la fecha y la cantidad a los formatos esperados.
         return [
             {
                 "fecha": datetime.strptime(venta["fecha"], "%Y-%m-%d"),
@@ -39,22 +39,6 @@ def filtrar_ventas_por_producto(ventas, id_producto):
         # Si ocurre un error al procesar las ventas, lo informo.
         print(f"Error al procesar las ventas: {e}")
         return []
-
-
-def dividir_y_vencer_ventas(ventas):
-    """
-    Aplico el enfoque Divide y Vencerás para calcular el promedio de las cantidades de ventas.
-    """
-    if len(ventas) == 1:  # Caso base: si solo hay una venta, devuelvo la cantidad.
-        return ventas[0]["cantidad"]
-
-    # Divido la lista en dos mitades.
-    mitad = len(ventas) // 2
-    promedio_izquierda = dividir_y_vencer_ventas(ventas[:mitad])
-    promedio_derecha = dividir_y_vencer_ventas(ventas[mitad:])
-
-    # Combino los resultados calculando el promedio de ambas mitades.
-    return (promedio_izquierda + promedio_derecha) / 2
 
 
 def calcular_tasa_cambio(ventas):
@@ -79,7 +63,7 @@ def calcular_tasa_cambio(ventas):
 
 def estimar_ventas_futuras():
     """
-    Estimo las ventas futuras para un producto utilizando Divide y Vencerás y tasa de cambio.
+    Estimo las ventas futuras para un producto utilizando tendencias y tasas de cambio.
     """
     # Cargo el archivo de ventas.
     ventas = cargar_csv("ventas.csv")
@@ -98,9 +82,6 @@ def estimar_ventas_futuras():
         print(f"No se encontraron ventas para el producto con ID {id_producto}.")
         return
 
-    # Calculo el promedio histórico de las ventas usando Divide y Vencerás.
-    promedio_historico = dividir_y_vencer_ventas(ventas_producto)
-
     # Calculo la tasa de cambio promedio entre las ventas consecutivas.
     tasa_cambio = calcular_tasa_cambio(ventas_producto)
 
@@ -110,5 +91,5 @@ def estimar_ventas_futuras():
 
     # Muestro la estimación de ventas futuras.
     print(f"\nEstimación de Ventas Futuras para el Producto {id_producto}:")
-    print(f"Promedio histórico: {round(promedio_historico, 2)} unidades.")
+    print(f"Tasa de cambio promedio: {round(tasa_cambio * 100, 2)}%")
     print(f"Proyección estimada para el próximo mes: {round(proyeccion, 2)} unidades.")
